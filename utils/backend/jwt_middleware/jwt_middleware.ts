@@ -82,7 +82,7 @@ export function createJwtMiddleware(
       });
 
       if (unverifiedDecodedToken?.header?.kid == null) {
-        console.trace(
+        console.error(
           `jwtMiddleware: expected token to contain 'kid' claim header`,
         );
         return sendUnauthorizedResponse(res);
@@ -104,7 +104,7 @@ export function createJwtMiddleware(
         payload.brandId == null ||
         payload.aud == null
       ) {
-        console.trace(
+        console.error(
           "jwtMiddleware: failed to decode jwt missing fields from payload",
         );
         return sendUnauthorizedResponse(res);
@@ -154,7 +154,7 @@ export const getTokenFromQueryString: GetTokenFromRequest = (
 
   const queryParam = req.query[tokenQueryStringParamName];
   if (!queryParam || typeof queryParam !== "string") {
-    console.trace(
+    console.error(
       `jwtMiddleware: missing "${tokenQueryStringParamName}" query parameter`,
     );
     throw new JWTAuthorizationError(
@@ -163,7 +163,7 @@ export const getTokenFromQueryString: GetTokenFromRequest = (
   }
 
   if (!looksLikeJWT(queryParam)) {
-    console.trace(
+    console.error(
       `jwtMiddleware: invalid "${tokenQueryStringParamName}" query parameter`,
     );
     throw new JWTAuthorizationError(
@@ -187,7 +187,7 @@ export const getTokenFromHttpHeader: GetTokenFromRequest = (
   }
 
   if (!header.match(new RegExp(`^${schemeName}\\s+[^\\s]+$`, "i"))) {
-    console.trace(
+    console.error(
       `jwtMiddleware: failed to match token in "${headerName}" header`,
     );
     throw new JWTAuthorizationError(
