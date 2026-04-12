@@ -1,12 +1,14 @@
 import { Button, Rows, Text } from "@canva/app-ui-kit";
 import { requestOpenExternalUrl } from "@canva/platform";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useState } from "react";
 import * as styles from "styles/components.css";
 import { useAddElement } from "utils/use_add_element";
 
 export const DOCS_URL = "https://www.canva.dev/docs/apps/";
 
 export const App = () => {
+  const [isOpeningUrl, setIsOpeningUrl] = useState(false);
   const addElement = useAddElement();
   const onClick = () => {
     addElement({
@@ -16,12 +18,17 @@ export const App = () => {
   };
 
   const openExternalUrl = async (url: string) => {
-    const response = await requestOpenExternalUrl({
-      url,
-    });
+    try {
+      setIsOpeningUrl(true);
+      const response = await requestOpenExternalUrl({
+        url,
+      });
 
-    if (response.status === "aborted") {
-      // user decided not to navigate to the link
+      if (response.status === "aborted") {
+        // user decided not to navigate to the link
+      }
+    } finally {
+      setIsOpeningUrl(false);
     }
   };
 
@@ -49,7 +56,11 @@ export const App = () => {
               "Button text to do something cool. Creates a new text element when pressed.",
           })}
         </Button>
-        <Button variant="secondary" onClick={() => openExternalUrl(DOCS_URL)}>
+        <Button
+          variant="secondary"
+          onClick={() => openExternalUrl(DOCS_URL)}
+          loading={isOpeningUrl}
+        >
           {intl.formatMessage({
             defaultMessage: "Open Canva Apps SDK docs",
             description:

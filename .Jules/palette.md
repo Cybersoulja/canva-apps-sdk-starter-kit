@@ -1,0 +1,1 @@
+## 2026-04-12 - Add loading state to openExternalUrl action\n**Learning:** The `Button` component in `@canva/app-ui-kit` supports a `loading` prop which is useful to provide feedback when triggering async operations such as opening external links.\n**Action:** Remember to check for missing loading states in async UI actions.
