@@ -1,0 +1,1 @@
+## 2024-04-18 - External Link Expectation Management\n**Learning:** Users lack visual cues when a button opens an external link rather than performing an in-app action, potentially leading to a disjointed context-switching experience.\n**Action:** Add `OpenInNewIcon` to any external link button using `iconPosition="end"`.
