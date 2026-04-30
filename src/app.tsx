@@ -1,4 +1,4 @@
-import { Button, Rows, Text } from "@canva/app-ui-kit";
+import { Button, OpenInNewIcon, Rows, Text } from "@canva/app-ui-kit";
 import { requestOpenExternalUrl } from "@canva/platform";
 import { FormattedMessage, useIntl } from "react-intl";
 import * as styles from "styles/components.css";
@@ -49,7 +49,7 @@ export const App = () => {
               "Button text to do something cool. Creates a new text element when pressed.",
           })}
         </Button>
-        <Button variant="secondary" onClick={() => openExternalUrl(DOCS_URL)}>
+        <Button variant="secondary" icon={OpenInNewIcon} iconPosition="end" onClick={() => openExternalUrl(DOCS_URL)}>
           {intl.formatMessage({
             defaultMessage: "Open Canva Apps SDK docs",
             description:
