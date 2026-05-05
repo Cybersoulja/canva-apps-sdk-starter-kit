@@ -1,5 +1,6 @@
 import { Button, OpenInNewIcon, Rows, Text } from "@canva/app-ui-kit";
 import { requestOpenExternalUrl } from "@canva/platform";
+import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import * as styles from "styles/components.css";
 import { useAddElement } from "utils/use_add_element";
@@ -8,6 +9,7 @@ export const DOCS_URL = "https://www.canva.dev/docs/apps/";
 
 export const App = () => {
   const addElement = useAddElement();
+  const [isOpeningDocs, setIsOpeningDocs] = useState(false);
   const onClick = () => {
     addElement({
       type: "text",
@@ -16,12 +18,17 @@ export const App = () => {
   };
 
   const openExternalUrl = async (url: string) => {
-    const response = await requestOpenExternalUrl({
-      url,
-    });
+    setIsOpeningDocs(true);
+    try {
+      const response = await requestOpenExternalUrl({
+        url,
+      });
 
-    if (response.status === "aborted") {
-      // user decided not to navigate to the link
+      if (response.status === "aborted") {
+        // user decided not to navigate to the link
+      }
+    } finally {
+      setIsOpeningDocs(false);
     }
   };
 
@@ -54,6 +61,7 @@ export const App = () => {
           onClick={() => openExternalUrl(DOCS_URL)}
           icon={OpenInNewIcon}
           iconPosition="end"
+          disabled={isOpeningDocs}
         >
           {intl.formatMessage({
             defaultMessage: "Open Canva Apps SDK docs",
