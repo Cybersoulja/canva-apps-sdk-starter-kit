@@ -1,5 +1,6 @@
 import { Button, Link, Rows, Text, Title, OpenInNewIcon } from "@canva/app-ui-kit";
 import { requestOpenExternalUrl } from "@canva/platform";
+import { useState } from "react";
 import * as styles from "styles/components.css";
 
 const DOCS_URL =
@@ -10,13 +11,21 @@ const ACCEPTING_PAYMENTS_URL =
   "https://www.canva.dev/docs/apps/accepting-payments/";
 
 export const App = () => {
-  const openExternalUrl = async (url: string) => {
-    const response = await requestOpenExternalUrl({
-      url,
-    });
+  const [openingGuidelines, setOpeningGuidelines] = useState(false);
+  const [openingPayments, setOpeningPayments] = useState(false);
 
-    if (response.status === "aborted") {
-      // user decided not to navigate to the link
+  const openExternalUrl = async (url: string, setOpening?: (v: boolean) => void) => {
+    try {
+      setOpening?.(true);
+      const response = await requestOpenExternalUrl({
+        url,
+      });
+
+      if (response.status === "aborted") {
+        // user decided not to navigate to the link
+      }
+    } finally {
+      setOpening?.(false);
     }
   };
 
@@ -39,17 +48,19 @@ export const App = () => {
         <Text>Be sure to checkout the below guidelines</Text>
         <Button
           variant="secondary"
-          onClick={() => openExternalUrl(GUIDELINES_URL)}
+          onClick={() => openExternalUrl(GUIDELINES_URL, setOpeningGuidelines)}
           icon={OpenInNewIcon}
           iconPosition="end"
+          loading={openingGuidelines}
         >
           Design Guidelines
         </Button>
         <Button
           variant="secondary"
-          onClick={() => openExternalUrl(ACCEPTING_PAYMENTS_URL)}
+          onClick={() => openExternalUrl(ACCEPTING_PAYMENTS_URL, setOpeningPayments)}
           icon={OpenInNewIcon}
           iconPosition="end"
+          loading={openingPayments}
         >
           Payment links
         </Button>
