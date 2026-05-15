@@ -25,6 +25,18 @@ export const QUOTA_ERROR =
 export const App = () => {
   const [error, setError] = useState<string | undefined>();
   const [color, setColor] = useState<string | undefined>(undefined);
+  const [openingDocs, setOpeningDocs] = useState(false);
+  const [openingApi, setOpeningApi] = useState(false);
+  const [addingPage, setAddingPage] = useState(false);
+
+  const openExternalUrl = async (url: string, setOpening: (v: boolean) => void) => {
+    try {
+      setOpening(true);
+      await requestOpenExternalUrl({ url });
+    } finally {
+      setOpening(false);
+    }
+  };
 
   const handleSwatchClick = async (boundingRect: Anchor) => {
     const closeFn = await openColorSelector(boundingRect, {
@@ -40,6 +52,7 @@ export const App = () => {
 
   const handleAddPage = async () => {
     try {
+      setAddingPage(true);
       await addPage({
         title: "New Page Added By Button",
         background: {
@@ -58,6 +71,8 @@ export const App = () => {
             break;
         }
       }
+    } finally {
+      setAddingPage(false);
     }
   };
 
@@ -85,9 +100,10 @@ export const App = () => {
             <Button
               stretch
               variant="secondary"
-              onClick={() => requestOpenExternalUrl({ url: DOCS_URL })}
+              onClick={() => openExternalUrl(DOCS_URL, setOpeningDocs)}
               icon={OpenInNewIcon}
               iconPosition="end"
+              loading={openingDocs}
             >
               Apps SDK
             </Button>
@@ -96,9 +112,10 @@ export const App = () => {
             <Button
               variant="secondary"
               stretch
-              onClick={() => requestOpenExternalUrl({ url: API_URL })}
+              onClick={() => openExternalUrl(API_URL, setOpeningApi)}
               icon={OpenInNewIcon}
               iconPosition="end"
+              loading={openingApi}
             >
               API Reference
             </Button>
@@ -107,7 +124,7 @@ export const App = () => {
         {/* === Displaying this section is contingent on the feature being supported - this can be mocked in a unit test to check both paths */}
         <Title>Add Page</Title>
         {canAddPage ? (
-          <Button variant="secondary" onClick={() => handleAddPage()}>
+          <Button variant="secondary" onClick={() => handleAddPage()} loading={addingPage}>
             Add Page
           </Button>
         ) : (

@@ -51,7 +51,7 @@ describe("Example Tests", () => {
   });
 
   // this test demonstrates assertions for the arguments passed to a Canva App API function across multiple calls
-  it("should call `requestOpenExternalUrl` when the button is clicked", () => {
+  it("should call `requestOpenExternalUrl` when the button is clicked", async () => {
     expect(mockRequestOpenExternalUrl).not.toHaveBeenCalled();
 
     const result = renderInTestProvider(<App />);
@@ -62,7 +62,7 @@ describe("Example Tests", () => {
     });
 
     expect(mockRequestOpenExternalUrl).not.toHaveBeenCalled();
-    fireEvent.click(sdkButton);
+    await fireEvent.click(sdkButton);
     expect(mockRequestOpenExternalUrl).toHaveBeenCalled();
 
     // assert that the requestOpenExternalUrl function was called with the expected arguments
@@ -74,7 +74,7 @@ describe("Example Tests", () => {
     const referenceButton = result.getByRole("button", {
       name: /Reference/,
     });
-    fireEvent.click(referenceButton);
+    await fireEvent.click(referenceButton);
     expect(mockRequestOpenExternalUrl).toHaveBeenCalledTimes(2);
     expect(mockRequestOpenExternalUrl.mock.calls[1][0]).toEqual({
       url: API_URL,
@@ -83,7 +83,7 @@ describe("Example Tests", () => {
 
   // the addPage function is not supported in all design types, so we need to test how the app handles this
   // the next three tests demonstrate the permutations - when it is supported , when it is not supported, and when it is supported but throws an error
-  it("should show a button when `addPage` is supported and call it when the button is clicked", () => {
+  it("should show a button when `addPage` is supported and call it when the button is clicked", async () => {
     const result = renderInTestProvider(<App />);
 
     const addPageButton = result.getByRole("button", {
@@ -94,7 +94,7 @@ describe("Example Tests", () => {
     expect(addPageButton).toBeDefined();
 
     expect(addPage).not.toHaveBeenCalled();
-    fireEvent.click(addPageButton);
+    await fireEvent.click(addPageButton);
     expect(addPage).toHaveBeenCalled();
   });
 
