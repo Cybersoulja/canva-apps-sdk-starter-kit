@@ -1,8 +1,9 @@
-import { Button, Rows, Text } from "@canva/app-ui-kit";
+import { Button, OpenInNewIcon, Rows, Text } from "@canva/app-ui-kit";
 import { requestOpenExternalUrl } from "@canva/platform";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import * as styles from "styles/components.css";
+import { useState } from "react";
 import { useAddElement } from "utils/use_add_element";
 
 export const DOCS_URL = "https://www.canva.dev/docs/apps/";
