@@ -1,4 +1,4 @@
-import { Button, Link, Rows, Text, Title } from "@canva/app-ui-kit";
+import { Button, Link, Rows, Text, Title, OpenInNewIcon } from "@canva/app-ui-kit";
 import { requestOpenExternalUrl } from "@canva/platform";
 import * as styles from "styles/components.css";
 
@@ -40,12 +40,16 @@ export const App = () => {
         <Button
           variant="secondary"
           onClick={() => openExternalUrl(GUIDELINES_URL)}
+          icon={OpenInNewIcon}
+          iconPosition="end"
         >
           Design Guidelines
         </Button>
         <Button
           variant="secondary"
           onClick={() => openExternalUrl(ACCEPTING_PAYMENTS_URL)}
+          icon={OpenInNewIcon}
+          iconPosition="end"
         >
           Payment links
         </Button>

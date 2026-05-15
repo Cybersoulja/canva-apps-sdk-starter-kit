@@ -6,6 +6,7 @@ import {
   Swatch,
   Text,
   Title,
+  OpenInNewIcon,
 } from "@canva/app-ui-kit";
 import * as styles from "styles/components.css";
 import { requestOpenExternalUrl } from "@canva/platform";
@@ -85,6 +86,8 @@ export const App = () => {
               stretch
               variant="secondary"
               onClick={() => requestOpenExternalUrl({ url: DOCS_URL })}
+              icon={OpenInNewIcon}
+              iconPosition="end"
             >
               Apps SDK
             </Button>
@@ -94,6 +97,8 @@ export const App = () => {
               variant="secondary"
               stretch
               onClick={() => requestOpenExternalUrl({ url: API_URL })}
+              icon={OpenInNewIcon}
+              iconPosition="end"
             >
               API Reference
             </Button>
