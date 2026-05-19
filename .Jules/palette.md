@@ -7,3 +7,6 @@
 ## 2024-05-13 - Add OpenInNewIcon to external links
 **Learning:** `OpenInNewIcon` is available in `@canva/app-ui-kit` and using `icon={OpenInNewIcon}` and `iconPosition="end"` on `Button` components that trigger `requestOpenExternalUrl` is a great reusable pattern for providing users visual feedback that an action will open a link in a new tab/window, setting proper expectations.
 **Action:** Consistently add this icon pattern to all buttons across the app that navigate to external URLs.
+## 2024-05-13 - Add loading state to async generic buttons
+**Learning:** Adding an async loading state to standard functional buttons (not just specific form submissions or external links) significantly enhances the perceived responsiveness and feedback of the UI.
+**Action:** Always wrap standard async button callbacks in a `try/finally` block to reliably provide a `loading` state to standard `<Button>` components while tasks process.
