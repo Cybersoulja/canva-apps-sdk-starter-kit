@@ -9,12 +9,18 @@ export const DOCS_URL = "https://www.canva.dev/docs/apps/";
 
 export const App = () => {
   const [isOpeningUrl, setIsOpeningUrl] = useState(false);
+  const [isAddingElement, setIsAddingElement] = useState(false);
   const addElement = useAddElement();
-  const onClick = () => {
-    addElement({
-      type: "text",
-      children: ["Hello world!"],
-    });
+  const onClick = async () => {
+    try {
+      setIsAddingElement(true);
+      await addElement({
+        type: "text",
+        children: ["Hello world!"],
+      });
+    } finally {
+      setIsAddingElement(false);
+    }
   };
 
   const openExternalUrl = async (url: string) => {
@@ -49,7 +55,7 @@ export const App = () => {
             }}
           />
         </Text>
-        <Button variant="primary" onClick={onClick} stretch>
+        <Button variant="primary" onClick={onClick} stretch loading={isAddingElement}>
           {intl.formatMessage({
             defaultMessage: "Do something cool",
             description:
