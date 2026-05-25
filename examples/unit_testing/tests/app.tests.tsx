@@ -1,6 +1,6 @@
 import { TestAppUiProvider } from "@canva/app-ui-kit";
 import type { RenderResult } from "@testing-library/react";
-import { fireEvent, render, within } from "@testing-library/react";
+import { act, fireEvent, render, within } from "@testing-library/react";
 import { openColorSelector } from "@canva/asset";
 import { features, requestOpenExternalUrl } from "@canva/platform";
 import { API_URL, App, DOCS_URL, QUOTA_ERROR } from "../app";
@@ -83,7 +83,7 @@ describe("Example Tests", () => {
 
   // the addPage function is not supported in all design types, so we need to test how the app handles this
   // the next three tests demonstrate the permutations - when it is supported , when it is not supported, and when it is supported but throws an error
-  it("should show a button when `addPage` is supported and call it when the button is clicked", () => {
+  it("should show a button when `addPage` is supported and call it when the button is clicked", async () => {
     const result = renderInTestProvider(<App />);
 
     const addPageButton = result.getByRole("button", {
@@ -94,7 +94,10 @@ describe("Example Tests", () => {
     expect(addPageButton).toBeDefined();
 
     expect(addPage).not.toHaveBeenCalled();
-    fireEvent.click(addPageButton);
+    // Wrap the state update inside act() by awaiting the async action
+    await act(async () => {
+      await fireEvent.click(addPageButton);
+    });
     expect(addPage).toHaveBeenCalled();
   });
 
@@ -120,7 +123,9 @@ describe("Example Tests", () => {
       name: "Add Page",
     });
 
-    fireEvent.click(addPageButton);
+    await act(async () => {
+      await fireEvent.click(addPageButton);
+    });
 
     expect(mockAddPage).toHaveBeenCalled();
 
