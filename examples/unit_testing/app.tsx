@@ -25,6 +25,7 @@ export const QUOTA_ERROR =
 export const App = () => {
   const [error, setError] = useState<string | undefined>();
   const [color, setColor] = useState<string | undefined>(undefined);
+  const [isAddingPage, setIsAddingPage] = useState(false);
 
   const handleSwatchClick = async (boundingRect: Anchor) => {
     const closeFn = await openColorSelector(boundingRect, {
@@ -40,6 +41,7 @@ export const App = () => {
 
   const handleAddPage = async () => {
     try {
+      setIsAddingPage(true);
       await addPage({
         title: "New Page Added By Button",
         background: {
@@ -58,6 +60,8 @@ export const App = () => {
             break;
         }
       }
+    } finally {
+      setIsAddingPage(false);
     }
   };
 
@@ -107,7 +111,11 @@ export const App = () => {
         {/* === Displaying this section is contingent on the feature being supported - this can be mocked in a unit test to check both paths */}
         <Title>Add Page</Title>
         {canAddPage ? (
-          <Button variant="secondary" onClick={() => handleAddPage()}>
+          <Button
+            variant="secondary"
+            onClick={() => handleAddPage()}
+            loading={isAddingPage}
+          >
             Add Page
           </Button>
         ) : (
