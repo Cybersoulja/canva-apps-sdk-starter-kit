@@ -7,3 +7,7 @@
 ## 2024-05-13 - Add OpenInNewIcon to external links
 **Learning:** `OpenInNewIcon` is available in `@canva/app-ui-kit` and using `icon={OpenInNewIcon}` and `iconPosition="end"` on `Button` components that trigger `requestOpenExternalUrl` is a great reusable pattern for providing users visual feedback that an action will open a link in a new tab/window, setting proper expectations.
 **Action:** Consistently add this icon pattern to all buttons across the app that navigate to external URLs.
+
+## 2024-05-14 - Design Modifications Loading States
+**Learning:** Functions that modify the design (like `addElementAtPoint` and `addElementAtCursor`) are asynchronous. Users might click multiple times if there's no immediate feedback while the element is being added.
+**Action:** Always wrap design SDK modifications in `try/finally` blocks and bind them to a `loading` state on the triggering UI component (like `Button`) to prevent duplicate additions and provide visual feedback.
