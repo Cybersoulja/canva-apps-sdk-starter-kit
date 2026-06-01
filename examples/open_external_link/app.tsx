@@ -1,4 +1,11 @@
-import { Button, Link, Rows, Text, Title, OpenInNewIcon } from "@canva/app-ui-kit";
+import {
+  Button,
+  Link,
+  Rows,
+  Text,
+  Title,
+  OpenInNewIcon,
+} from "@canva/app-ui-kit";
 import { requestOpenExternalUrl } from "@canva/platform";
 import * as styles from "styles/components.css";
 
