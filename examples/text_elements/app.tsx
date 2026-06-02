@@ -33,17 +33,23 @@ const initialState: UIState = {
 
 export const App = () => {
   const [state, setState] = useState<UIState>(initialState);
+  const [loading, setLoading] = useState(false);
   const addElement = useAddElement();
 
   const { text, color, fontWeight, fontStyle, decoration, textAlign } = state;
   const disabled = text.trim().length < 1 || color.trim().length < 1;
 
   const addText = useCallback(async () => {
-    await addElement({
-      type: "text",
-      ...state,
-      children: [state.text],
-    });
+    try {
+      setLoading(true);
+      await addElement({
+        type: "text",
+        ...state,
+        children: [state.text],
+      });
+    } finally {
+      setLoading(false);
+    }
   }, [state, addElement]);
 
   return (
@@ -181,7 +187,7 @@ export const App = () => {
             />
           )}
         />
-        <Button variant="primary" onClick={addText} disabled={disabled} stretch>
+        <Button variant="primary" onClick={addText} disabled={disabled} stretch loading={loading}>
           Add element
         </Button>
       </Rows>
