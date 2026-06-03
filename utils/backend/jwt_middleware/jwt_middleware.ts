@@ -219,9 +219,8 @@ export class JWTAuthorizationError extends Error {
   }
 }
 
-const looksLikeJWT = (
-  token: string,
-): boolean => // Base64 alphabet includes
+const looksLikeJWT = (token: string): boolean =>
+  // Base64 alphabet includes
   //   - letters (a-z and A-Z)
   //   - digits (0-9)
   //   - two special characters (+/ or -_)
