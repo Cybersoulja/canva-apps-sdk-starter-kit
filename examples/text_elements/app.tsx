@@ -187,7 +187,13 @@ export const App = () => {
             />
           )}
         />
-        <Button variant="primary" onClick={addText} disabled={disabled} stretch loading={loading}>
+        <Button
+          variant="primary"
+          onClick={addText}
+          disabled={disabled}
+          stretch
+          loading={loading}
+        >
           Add element
         </Button>
       </Rows>

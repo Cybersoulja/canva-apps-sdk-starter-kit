@@ -45,6 +45,8 @@ export const App = () => {
   const [textConfig, setTextConfig] = useState<TextConfig>(initialConfig);
   const [selectedFont, setSelectedFont] = useState<Font | undefined>(undefined);
   const [availableFonts, setAvailableFonts] = useState<readonly Font[]>([]);
+  const [isSelectingFont, setIsSelectingFont] = useState(false);
+  const [isAddingText, setIsAddingText] = useState(false);
 
   const fetchFonts = useCallback(async () => {
     const response = await findFonts();
@@ -137,15 +139,21 @@ export const App = () => {
           alignment="start"
           stretch={true}
           onClick={async () => {
-            const response = await requestFontSelection({
-              selectedFontRef: selectedFont?.ref,
-            });
-            if (response.type === "completed") {
-              setSelectedFont(response.font);
-              resetSelectedFontStyleAndWeight(response.font);
+            try {
+              setIsSelectingFont(true);
+              const response = await requestFontSelection({
+                selectedFontRef: selectedFont?.ref,
+              });
+              if (response.type === "completed") {
+                setSelectedFont(response.font);
+                resetSelectedFontStyleAndWeight(response.font);
+              }
+            } finally {
+              setIsSelectingFont(false);
             }
           }}
           disabled={disabled}
+          loading={isSelectingFont}
         >
           {selectedFont?.name || "Select a font"}
         </Button>
@@ -203,16 +211,22 @@ export const App = () => {
         />
         <Button
           variant="primary"
-          onClick={() => {
-            addElement({
-              type: "text",
-              ...textConfig,
-              fontRef: selectedFont?.ref,
-              children: [textConfig.text],
-            });
+          onClick={async () => {
+            try {
+              setIsAddingText(true);
+              await addElement({
+                type: "text",
+                ...textConfig,
+                fontRef: selectedFont?.ref,
+                children: [textConfig.text],
+              });
+            } finally {
+              setIsAddingText(false);
+            }
           }}
           disabled={disabled}
           stretch
+          loading={isAddingText}
         >
           Add text element
         </Button>

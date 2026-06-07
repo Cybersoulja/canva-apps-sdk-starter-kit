@@ -10,3 +10,6 @@
 ## 2024-06-01 - Add loading state to async design modifications
 **Learning:** Canva design SDK functions that modify the design (such as `addElement`) are asynchronous and return Promises. Failing to reflect this in UI elements like buttons leads to missing visual feedback during execution.
 **Action:** Always track the Promise lifecycle (e.g., via `try/finally`) and bind it to the `loading` state of `@canva/app-ui-kit`'s Button component.
+## 2026-06-06 - requestOpenExternalUrl Loading State Anti-pattern
+**Learning:** The `requestOpenExternalUrl` API opens a confirmation dialog *instantly*, but its Promise does not resolve until the user interacts with that dialog (confirming or cancelling). Using a `loading` state spinner on the button triggering this action creates a confusing UX, as the system appears to be processing while it is actually waiting for user input.
+**Action:** Do NOT use the `@canva/app-ui-kit` Button's `loading` prop for actions that trigger `requestOpenExternalUrl`. Reserve `loading` states for actual asynchronous processing like network requests, asset uploads, or other SDK operations (like `addElement` or `requestFontSelection`).
