@@ -8,7 +8,6 @@ import { useAddElement } from "utils/use_add_element";
 export const DOCS_URL = "https://www.canva.dev/docs/apps/";
 
 export const App = () => {
-  const [isOpeningUrl, setIsOpeningUrl] = useState(false);
   const [isAddingElement, setIsAddingElement] = useState(false);
   const addElement = useAddElement();
   const onClick = async () => {
@@ -24,17 +23,12 @@ export const App = () => {
   };
 
   const openExternalUrl = async (url: string) => {
-    try {
-      setIsOpeningUrl(true);
-      const response = await requestOpenExternalUrl({
-        url,
-      });
+    const response = await requestOpenExternalUrl({
+      url,
+    });
 
-      if (response.status === "aborted") {
-        // user decided not to navigate to the link
-      }
-    } finally {
-      setIsOpeningUrl(false);
+    if (response.status === "aborted") {
+      // user decided not to navigate to the link
     }
   };
 
@@ -72,7 +66,6 @@ export const App = () => {
           onClick={() => openExternalUrl(DOCS_URL)}
           icon={OpenInNewIcon}
           iconPosition="end"
-          loading={isOpeningUrl}
         >
           {intl.formatMessage({
             defaultMessage: "Open Canva Apps SDK docs",
