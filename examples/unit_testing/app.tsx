@@ -25,6 +25,17 @@ export const QUOTA_ERROR =
 export const App = () => {
   const [error, setError] = useState<string | undefined>();
   const [color, setColor] = useState<string | undefined>(undefined);
+  const [openingUrl, setOpeningUrl] = useState<string | null>(null);
+  const [isAddingPage, setIsAddingPage] = useState(false);
+
+  const handleOpenExternalUrl = async (url: string) => {
+    try {
+      setOpeningUrl(url);
+      await requestOpenExternalUrl({ url });
+    } finally {
+      setOpeningUrl(null);
+    }
+  };
 
   const handleSwatchClick = async (boundingRect: Anchor) => {
     const closeFn = await openColorSelector(boundingRect, {
@@ -40,6 +51,7 @@ export const App = () => {
 
   const handleAddPage = async () => {
     try {
+      setIsAddingPage(true);
       await addPage({
         title: "New Page Added By Button",
         background: {
@@ -58,6 +70,8 @@ export const App = () => {
             break;
         }
       }
+    } finally {
+      setIsAddingPage(false);
     }
   };
 
@@ -85,9 +99,10 @@ export const App = () => {
             <Button
               stretch
               variant="secondary"
-              onClick={() => requestOpenExternalUrl({ url: DOCS_URL })}
+              onClick={() => handleOpenExternalUrl(DOCS_URL)}
               icon={OpenInNewIcon}
               iconPosition="end"
+              loading={openingUrl === DOCS_URL}
             >
               Apps SDK
             </Button>
@@ -96,9 +111,10 @@ export const App = () => {
             <Button
               variant="secondary"
               stretch
-              onClick={() => requestOpenExternalUrl({ url: API_URL })}
+              onClick={() => handleOpenExternalUrl(API_URL)}
               icon={OpenInNewIcon}
               iconPosition="end"
+              loading={openingUrl === API_URL}
             >
               API Reference
             </Button>
@@ -107,7 +123,7 @@ export const App = () => {
         {/* === Displaying this section is contingent on the feature being supported - this can be mocked in a unit test to check both paths */}
         <Title>Add Page</Title>
         {canAddPage ? (
-          <Button variant="secondary" onClick={() => handleAddPage()}>
+          <Button variant="secondary" onClick={() => handleAddPage()} loading={isAddingPage}>
             Add Page
           </Button>
         ) : (
