@@ -163,15 +163,19 @@ const CellElement = ({
 export const App = () => {
   const tableState = useTable(initialState);
   const [submissionError, setSubmissionError] = useState("");
+  const [loading, setLoading] = useState(false);
   const addElement = useAddElement();
 
   const onClick = useCallback(async () => {
     try {
+      setLoading(true);
       await addElement(tableState.toElement());
     } catch (e) {
       if (e instanceof Error) {
         setSubmissionError(e.message);
       }
+    } finally {
+      setLoading(false);
     }
   }, [tableState]);
 
@@ -234,7 +238,7 @@ export const App = () => {
         <Button variant="secondary" onClick={onAddCell} icon={PlusIcon}>
           New custom cell
         </Button>
-        <Button variant="primary" onClick={onClick} stretch>
+        <Button variant="primary" onClick={onClick} stretch loading={loading}>
           Add element
         </Button>
       </Rows>
