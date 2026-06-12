@@ -11,49 +11,58 @@ export const App = () => {
   const isRequiredFeatureSupported = isSupported(setCurrentPageBackground);
 
   const setBackgroundToSolidColor = async () => {
-    setLoading(true);
-    await setCurrentPageBackground({
-      color: "#ff0099",
-    });
-    setLoading(false);
+    try {
+      setLoading(true);
+      await setCurrentPageBackground({
+        color: "#ff0099",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const setBackgroundImage = async () => {
-    setLoading(true);
-    const { ref } = await upload({
-      type: "image",
-      mimeType: "image/jpeg",
-      url: "https://www.canva.dev/example-assets/image-import/image.jpg",
-      thumbnailUrl:
-        "https://www.canva.dev/example-assets/image-import/thumbnail.jpg",
-      width: 540,
-      height: 720,
-      aiDisclosure: "none",
-    });
-    await setCurrentPageBackground({
-      asset: { type: "image", ref },
-    });
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { ref } = await upload({
+        type: "image",
+        mimeType: "image/jpeg",
+        url: "https://www.canva.dev/example-assets/image-import/image.jpg",
+        thumbnailUrl:
+          "https://www.canva.dev/example-assets/image-import/thumbnail.jpg",
+        width: 540,
+        height: 720,
+        aiDisclosure: "none",
+      });
+      await setCurrentPageBackground({
+        asset: { type: "image", ref },
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const setBackgroundVideo = async () => {
-    setLoading(true);
-    const { ref } = await upload({
-      type: "video",
-      mimeType: "video/mp4",
-      url: "https://www.canva.dev/example-assets/video-import/video.mp4",
-      thumbnailImageUrl:
-        "https://www.canva.dev/example-assets/video-import/thumbnail-image.jpg",
-      thumbnailVideoUrl:
-        "https://www.canva.dev/example-assets/video-import/thumbnail-video.mp4",
-      width: 405,
-      height: 720,
-      aiDisclosure: "none",
-    });
-    await setCurrentPageBackground({
-      asset: { type: "video", ref },
-    });
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { ref } = await upload({
+        type: "video",
+        mimeType: "video/mp4",
+        url: "https://www.canva.dev/example-assets/video-import/video.mp4",
+        thumbnailImageUrl:
+          "https://www.canva.dev/example-assets/video-import/thumbnail-image.jpg",
+        thumbnailVideoUrl:
+          "https://www.canva.dev/example-assets/video-import/thumbnail-video.mp4",
+        width: 405,
+        height: 720,
+        aiDisclosure: "none",
+      });
+      await setCurrentPageBackground({
+        asset: { type: "video", ref },
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
