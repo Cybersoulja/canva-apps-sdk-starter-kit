@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { addElementAtPoint } from "@canva/design";
 import { upload } from "@canva/asset";
 import { Alert, Button, Rows, Text } from "@canva/app-ui-kit";
@@ -11,96 +12,109 @@ export const App = () => {
   const isSupported = useFeatureSupport();
   const isRequiredFeatureSupported = isSupported(addElementAtPoint);
 
-  const addShapeWithImageFill = async () => {
-    // Start uploading the image
-    const image = await upload({
-      type: "image",
-      mimeType: "image/jpeg",
-      url: "https://www.canva.dev/example-assets/image-import/image.jpg",
-      thumbnailUrl:
-        "https://www.canva.dev/example-assets/image-import/thumbnail.jpg",
-      width: 540,
-      height: 720,
-      aiDisclosure: "none",
-    });
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
 
-    // Add the image to the design
-    await addElementAtPoint({
-      type: "shape",
-      paths: [
-        {
-          d: HEART_PATH,
-          fill: {
-            dropTarget: true,
-            asset: {
-              type: "image",
-              ref: image.ref,
+  const addShapeWithImageFill = async () => {
+    setIsUploadingImage(true);
+    try {
+      // Start uploading the image
+      const image = await upload({
+        type: "image",
+        mimeType: "image/jpeg",
+        url: "https://www.canva.dev/example-assets/image-import/image.jpg",
+        thumbnailUrl:
+          "https://www.canva.dev/example-assets/image-import/thumbnail.jpg",
+        width: 540,
+        height: 720,
+        aiDisclosure: "none",
+      });
+
+      // Add the image to the design
+      await addElementAtPoint({
+        type: "shape",
+        paths: [
+          {
+            d: HEART_PATH,
+            fill: {
+              dropTarget: true,
+              asset: {
+                type: "image",
+                ref: image.ref,
+              },
             },
           },
+        ],
+        viewBox: {
+          width: 40,
+          height: 40,
+          top: 0,
+          left: 0,
         },
-      ],
-      viewBox: {
-        width: 40,
-        height: 40,
-        top: 0,
-        left: 0,
-      },
-    });
+      });
 
-    // Wait for the upload to finish so we can report errors if it fails to
-    // upload
-    await image.whenUploaded();
+      // Wait for the upload to finish so we can report errors if it fails to
+      // upload
+      await image.whenUploaded();
 
-    // upload is completed
-    // eslint-disable-next-line no-console
-    console.log("Upload complete!");
+      // upload is completed
+      // eslint-disable-next-line no-console
+      console.log("Upload complete!");
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const addShapeWithVideoFill = async () => {
-    // Start uploading the video
-    const video = await upload({
-      type: "video",
-      mimeType: "video/mp4",
-      url: "https://www.canva.dev/example-assets/video-import/video.mp4",
-      thumbnailImageUrl:
-        "https://www.canva.dev/example-assets/video-import/thumbnail-image.jpg",
-      thumbnailVideoUrl:
-        "https://www.canva.dev/example-assets/video-import/thumbnail-video.mp4",
-      width: 405,
-      height: 720,
-      aiDisclosure: "none",
-    });
+    setIsUploadingVideo(true);
+    try {
+      // Start uploading the video
+      const video = await upload({
+        type: "video",
+        mimeType: "video/mp4",
+        url: "https://www.canva.dev/example-assets/video-import/video.mp4",
+        thumbnailImageUrl:
+          "https://www.canva.dev/example-assets/video-import/thumbnail-image.jpg",
+        thumbnailVideoUrl:
+          "https://www.canva.dev/example-assets/video-import/thumbnail-video.mp4",
+        width: 405,
+        height: 720,
+        aiDisclosure: "none",
+      });
 
-    // Add the video to the design
-    await addElementAtPoint({
-      type: "shape",
-      paths: [
-        {
-          d: HEART_PATH,
-          fill: {
-            dropTarget: true,
-            asset: {
-              type: "video",
-              ref: video.ref,
+      // Add the video to the design
+      await addElementAtPoint({
+        type: "shape",
+        paths: [
+          {
+            d: HEART_PATH,
+            fill: {
+              dropTarget: true,
+              asset: {
+                type: "video",
+                ref: video.ref,
+              },
             },
           },
+        ],
+        viewBox: {
+          width: 40,
+          height: 40,
+          top: 0,
+          left: 0,
         },
-      ],
-      viewBox: {
-        width: 40,
-        height: 40,
-        top: 0,
-        left: 0,
-      },
-    });
+      });
 
-    // Wait for the upload to finish so we can report errors if it fails to
-    // upload
-    await video.whenUploaded();
+      // Wait for the upload to finish so we can report errors if it fails to
+      // upload
+      await video.whenUploaded();
 
-    // upload is completed
-    // eslint-disable-next-line no-console
-    console.log("Upload complete!");
+      // upload is completed
+      // eslint-disable-next-line no-console
+      console.log("Upload complete!");
+    } finally {
+      setIsUploadingVideo(false);
+    }
   };
 
   return (
@@ -116,6 +130,7 @@ export const App = () => {
             variant="secondary"
             // ShapeElement is not supported in certain design types such as docs.
             disabled={!isRequiredFeatureSupported}
+            loading={isUploadingImage}
             stretch
           >
             Add shape element with image fill
@@ -125,6 +140,7 @@ export const App = () => {
             variant="secondary"
             // ShapeElement is not supported in certain design types such as docs.
             disabled={!isRequiredFeatureSupported}
+            loading={isUploadingVideo}
             stretch
           >
             Add shape element with video fill
